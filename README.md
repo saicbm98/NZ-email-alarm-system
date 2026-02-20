@@ -201,6 +201,7 @@ nz-email-alarm-alert-system/
 - 💻 GitHub: [@saicbm98](https://github.com/saicbm98)
 
 **Open to:** AI Operations • Automation Engineering • Product Operations • Operations • Business Analysis
+
 **Availability:** 🟢 Immediate start
 
 ---
