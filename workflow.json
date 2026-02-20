@@ -1,0 +1,124 @@
+{
+  "name": "Email Alarm",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 15,
+              "unit": "minutes"
+            }
+          ]
+        },
+        "filters": {
+          "readStatus": "unread"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [0, 0],
+      "id": "83ea0701-cdf0-459f-8bd1-13fdf89b556a",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_GMAIL_CREDENTIAL_ID",
+          "name": "YOUR_GMAIL_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================\n// SETTINGS - Edit these whenever you want!\n// ============================================\n\nconst whitelist = [\n  'sender1@example.com',\n  'sender2@example.com'\n];\n\nconst keywords = [\n  'job', 'interview', 'visa', 'immigration',\n  'application status', 'offer', 'urgent',\n  'chat', 'call', 'status', 'employer', 'connect'\n];\n\n// ============================================\n// TIME CHECK\n// Active hours in IST (24-hour format)\n// ============================================\n\nconst activeStartHour = 1;\nconst activeStartMin = 30;\nconst activeEndHour = 11;\nconst activeEndMin = 0;\n\nconst now = new Date();\nconst istOffset = 5.5 * 60;\nconst utcMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();\nconst istMinutes = (utcMinutes + istOffset) % 1440;\nconst istHour = Math.floor(istMinutes / 60);\nconst istMin = Math.floor(istMinutes % 60);\n\nconst activeStart = activeStartHour * 60 + activeStartMin;\nconst activeEnd = activeEndHour * 60 + activeEndMin;\nconst currentTime = istHour * 60 + istMin;\nconst isActiveHours = currentTime >= activeStart && currentTime <= activeEnd;\n\nif (!isActiveHours) {\n  return [];\n}\n\n// ============================================\n// LOGIC\n// ============================================\nconst emails = $input.all();\nconst results = [];\n\nfor (const email of emails) {\n  const fromRaw = (email.json.From || email.json.from || '').toLowerCase();\n  const emailMatch = fromRaw.match(/<(.+?)>/) || [null, fromRaw];\n  const senderEmail = emailMatch[1].trim();\n  const senderDomain = senderEmail.split('@')[1] || '';\n  const subject = (email.json.Subject || email.json.subject || '').toLowerCase();\n\n  const isWhitelisted = whitelist.some(w => senderEmail.includes(w));\n  const isNzDomain = senderDomain.endsWith('.nz');\n  const hasKeyword = keywords.some(k => subject.includes(k));\n  const isImportant = isWhitelisted || isNzDomain || hasKeyword;\n\n  if (isImportant) {\n    const reasons = [];\n    if (isWhitelisted) reasons.push('Whitelisted sender');\n    if (isNzDomain) reasons.push('.nz domain');\n    if (hasKeyword) reasons.push('Keyword in subject');\n\n    results.push({\n      json: {\n        Subject: email.json.Subject || email.json.subject || 'No subject',\n        From: email.json.From || email.json.from || 'Unknown',\n        snippet: email.json.snippet || '',\n        reason: reasons.join(' + ')\n      }\n    });\n  }\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [208, 0],
+      "id": "bc870a30-1407-4e6b-869d-983e8e55d54a",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.pushover.net/1/messages.json",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "YOUR_PUSHOVER_API_TOKEN"
+            },
+            {
+              "name": "user",
+              "value": "YOUR_PUSHOVER_USER_KEY"
+            },
+            {
+              "name": "title",
+              "value": "={{ $json.reason }}: {{ $json.Subject }}"
+            },
+            {
+              "name": "message",
+              "value": "=From: {{ $json.From }}\\n\\n{{ $json.snippet }}"
+            },
+            {
+              "name": "priority",
+              "value": "2"
+            },
+            {
+              "name": "retry",
+              "value": "60"
+            },
+            {
+              "name": "expire",
+              "value": "600"
+            },
+            {
+              "name": "sound",
+              "value": "pushover"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [416, 0],
+      "id": "ebf6e62a-3638-42d4-8781-d1b8339181e6",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {},
+  "id": "nz-email-alarm",
+  "tags": []
+}

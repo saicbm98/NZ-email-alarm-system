@@ -1,0 +1,14 @@
+# Environment variables / secrets
+.env
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+
+# Node modules (if any tooling is added later)
+node_modules/
