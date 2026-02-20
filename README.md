@@ -33,6 +33,8 @@ This project applies the same principle behind all good automation: **identify a
 ```
 Gmail Trigger (15 min poll) → Code Node (filter + time check) → Pushover Emergency Alert
 ```
+### **Workflow Diagram**
+<img width="1918" height="696" alt="image" src="https://github.com/user-attachments/assets/44a3c8a3-25ef-4d50-9364-96f32c9e9595" />
 
 ### **Technical Components**
 
@@ -48,7 +50,7 @@ The Code node applies three checks to every incoming email. If **any** check pas
 
 | Check | What It Does | Example Match |
 |-------|-------------|---------------|
-| **Sender Whitelist** | Exact match against a list of known important email addresses | `kh@new-zealand-immigration.com` |
+| **Sender Whitelist** | Exact match against a list of known important email addresses | `xy@newzealand-immigrations.com` |
 | **Domain Check** | Matches any sender from a `.nz` domain | `recruiter@seek.co.nz` |
 | **Keyword Scan** | Searches subject line for configurable keywords | Subject: "Interview scheduled for Thursday" |
 
@@ -108,7 +110,7 @@ The alert title tells you **why** it was flagged (e.g., "Whitelisted sender + Ke
 
 2. **Configure Gmail Credential**
    - In Google Cloud Console: Create project → Enable Gmail API → OAuth 2.0 Client ID
-   - In n8n: Add Gmail OAuth2 credential → Authorize
+   - In n8n: Add Gmail OAuth2 credential → Authorise
 
 3. **Configure Pushover**
    - Create account at [pushover.net](https://pushover.net)
@@ -116,7 +118,7 @@ The alert title tells you **why** it was flagged (e.g., "Whitelisted sender + Ke
    - Copy your User Key from the Pushover dashboard
    - In the HTTP Request node: Replace `YOUR_PUSHOVER_API_TOKEN` and `YOUR_PUSHOVER_USER_KEY`
 
-4. **Customize Filters**
+4. **Customise Filters**
 
    Open the Code node and edit the **SETTINGS** section at the top:
 
@@ -148,7 +150,7 @@ The alert title tells you **why** it was flagged (e.g., "Whitelisted sender + Ke
 To ensure the alarm actually wakes you up:
 - Pushover app → set emergency notification sound to a loud alarm tone
 - Phone Settings → Apps → Pushover → Notifications → Override Do Not Disturb: ON
-- Phone Settings → Battery → Pushover → Disable battery optimization
+- Phone Settings → Battery → Pushover → Disable battery optimisation
 
 ---
 
@@ -156,7 +158,7 @@ To ensure the alarm actually wakes you up:
 
 | Challenge | Solution |
 |-----------|----------|
-| Gmail returns different field names (capitalized vs lowercase) | Dual fallback: `email.json.From \|\| email.json.from` |
+| Gmail returns different field names (capitalised vs lowercase) | Dual fallback: `email.json.From \|\| email.json.from` |
 | `From` field contains name + email in various formats | Regex extraction: `match(/<(.+?)>/)` to isolate email address |
 | `internalDate` is Unix milliseconds, not readable | `new Date(Number(timestamp))` conversion (used in testing) |
 | Can't test during off-hours | Wrapped time check in `/* */` block comments for testing, re-enabled for production |
@@ -165,7 +167,7 @@ To ensure the alarm actually wakes you up:
 
 ---
 
-## 🔄 Customization Options
+## 🔄 Customisation Options
 
 - **Change timezone**: Modify `istOffset` value (e.g., `8 * 60` for SGT, `0` for UTC)
 - **Add more senders**: Append to the `whitelist` array
@@ -179,7 +181,7 @@ To ensure the alarm actually wakes you up:
 ## 📂 Repository Structure
 ```
 nz-email-alarm-alert-system/
-├── workflow.json             # Sanitized n8n workflow (import directly)
+├── workflow.json             # Sanitised n8n workflow (import directly)
 ├── email_alarm_filter.js     # Standalone Code node logic with full comments
 ├── .gitignore
 └── README.md
@@ -190,7 +192,7 @@ nz-email-alarm-alert-system/
 ## 🤝 Connect
 
 **Creator:** Sai Medicherla
-**Specialties:** AI Operations • Automation Engineering • No-Code AI Solutions
+**Specialties:** AI Operations • AI Automation • No-Code AI Solutions • Business Analysis
 
 **Let's Connect:**
 - 🌐 Portfolio: [linkedin-replacer](https://linkedin-replacer-127790892770.us-west1.run.app/)
@@ -198,7 +200,7 @@ nz-email-alarm-alert-system/
 - 💼 Wellfound: [Sai Medicherla](https://wellfound.com/u/sai-medicherla)
 - 💻 GitHub: [@saicbm98](https://github.com/saicbm98)
 
-**Open to:** AI Operations • Automation Engineering • Product Operations
+**Open to:** AI Operations • Automation Engineering • Product Operations • Operations • Business Analysis
 **Availability:** 🟢 Immediate start
 
 ---
