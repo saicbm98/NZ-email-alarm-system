@@ -1,29 +1,29 @@
 # NZ Email Alarm Alert System | n8n Workflow
 
-> **Never miss a critical email while you sleep — intelligent email monitoring with emergency phone alerts**
+> **Never miss a critical email while you sleep - intelligent email monitoring with emergency phone alerts**
 
 ---
 
 ## 🎯 Project Overview
 
-A smart email monitoring workflow that watches Gmail during off-hours and triggers emergency phone alarms when important emails arrive. Built for a real use case: job hunting in New Zealand from India, where business hours fall squarely in the middle of the night.
+A smart email monitoring workflow that watches emails during off-hours and triggers emergency phone alarms when important emails arrive. Built for a real use case: New Zealand job hunting across timezones, where business hours fall squarely in the middle of the night.
 
 **The Problem:** New Zealand business hours (9 AM–5 PM NZST) translate to 1:30 AM–9:30 AM IST. Emails from immigration consultants, hiring managers, and recruiters arrive while you're asleep. A delayed response can mean a missed opportunity.
 
-**The Solution:** An n8n workflow that polls Gmail every 15 minutes, filters emails through a layered importance check (whitelisted senders, .nz domains, subject keywords), and fires a Pushover emergency alert that bypasses Do Not Disturb and rings like an alarm until acknowledged.
+**The Solution:** An n8n workflow that polls Gmail every 15 minutes, filters emails through a layered importance check (whitelisted senders, .nz domains, subject keywords), and sends a Pushover emergency alert that bypasses Do Not Disturb and rings like an alarm until acknowledged.
 
 ---
 
 ## 🚀 What This Demonstrates
 
 ### **AI Operations & Automation Engineering Skills**
-- **Real-world problem solving**: Identified a timezone-based communication gap and engineered an automated solution
+- **Real-world problem solving**: Identified a timezone-based communication gap and built an automated solution
 - **Multi-layer filtering logic**: Combined sender whitelist, domain matching, and keyword detection in a single Code node
 - **External API integration**: Connected Gmail OAuth2 + Pushover REST API with proper authentication and parameter handling
 - **Time-zone aware automation**: Built IST-based active hours logic that converts UTC to local time for precise scheduling
 
 ### **Operational Thinking**
-This project applies the same principle behind all good automation: **identify a repeating friction point → design a system that eliminates it → deploy and forget**. The workflow runs 24/7 but only alerts during the hours that matter, respecting both urgency and sleep.
+This project applies the same principle behind all good automation: **identify a repeating friction point → design a system that eliminates it → deploy**. The workflow runs 24/7 but only alerts during the hours that matter, respecting both urgency and sleep.
 
 ---
 
